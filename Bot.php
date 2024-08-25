@@ -3,6 +3,7 @@
 require __DIR__.'/vendor/autoload.php';
 require_once 'Triggers.php';
 require_once 'Responses.php';
+require_once 'TokenProvider.php';
 
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Message;
@@ -13,14 +14,10 @@ class Bot {
     private int $latestUpdateId = 1;
     private Triggers $triggers;
     private Responses $responses;
-// $latestUpdateId+= 545730153;
-// Example usage
-// var_dump(cou);
-// var_dump($telegram->getUpdates(['allowed_updates' => ['message']])); die;
 
     public function __construct()
     {
-        $this->telegram = new Api('');
+        $this->telegram = new Api(TokenProvider::getToken());
         $this->triggers = new Triggers();
         $this->responses = new Responses();
     }
@@ -34,18 +31,21 @@ class Bot {
         $this->processUpdates($this->telegram->getUpdates(['offset' => $this->getLatestUpdateId(), 'allowed_updates' => ['message']]));
     }
 function processUpdates(array $updates) {
-    /**@var Update */
-    // var_dump($updates); die;
     foreach($updates as $update) {
-        $this->processSingleUpdate($update);
-        // var_dump($message->get('text')); die;
+        try{
+            $this->processSingleUpdate($update);
+        } catch (\Exception $ex) {
+            //yes, do nothing
+        }
     }
 }
 
 function processSingleUpdate(Update $update) {
-    $this->latestUpdateId = $update->get('update_id')+1;//increase by 1
-    // var_dump($update); die;
+    $this->latestUpdateId = $update->get('update_id')+1;
     $message = $update->getMessage();
+    if (! $message instanceof Message) {
+        return;
+    }
     if ($this->isMessageSuitable($message)) {
         $this->replyToMessage($message);
     }
