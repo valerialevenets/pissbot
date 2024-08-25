@@ -75,7 +75,7 @@ function replyToMessage(Message $message)
 
 function isSerhii(Message $message): bool {
     $id = $message->get('from')['id'];
-    return $id == 273718429;
+    // return $id == 273718429;
     return $id == 942380502;
 }
 }
