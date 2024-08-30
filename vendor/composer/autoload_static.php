@@ -68,6 +68,10 @@ class ComposerStaticInit479c617e96f6f09dc6aad30dad81cdc9
             'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
+        'A' => 
+        array (
+            'Application\\' => 12,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -105,8 +109,8 @@ class ComposerStaticInit479c617e96f6f09dc6aad30dad81cdc9
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -130,9 +134,9 @@ class ComposerStaticInit479c617e96f6f09dc6aad30dad81cdc9
         ),
         'Illuminate\\Support\\' => 
         array (
-            0 => __DIR__ . '/..' . '/illuminate/macroable',
+            0 => __DIR__ . '/..' . '/illuminate/collections',
             1 => __DIR__ . '/..' . '/illuminate/conditionable',
-            2 => __DIR__ . '/..' . '/illuminate/collections',
+            2 => __DIR__ . '/..' . '/illuminate/macroable',
             3 => __DIR__ . '/..' . '/illuminate/support',
         ),
         'Illuminate\\Contracts\\' => 
@@ -162,6 +166,10 @@ class ComposerStaticInit479c617e96f6f09dc6aad30dad81cdc9
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
+        ),
+        'Application\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Application/src',
         ),
     );
 

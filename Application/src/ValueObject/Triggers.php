@@ -1,8 +1,10 @@
 <?php
 
-class Triggers{
+namespace Application\ValueObject;
+class Triggers
+{
 
-    public function getTriggers()
+    public static function getTriggers(): array
     {
         return [
             'наголосовали',

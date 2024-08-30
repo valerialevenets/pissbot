@@ -5,6 +5,9 @@ require_once 'Triggers.php';
 require_once 'Responses.php';
 require_once 'TokenProvider.php';
 
+use Application\TokenProvider;
+use Application\ValueObject\Responses;
+use Application\ValueObject\Triggers;
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Message;
 use Telegram\Bot\Objects\Update;
@@ -46,11 +49,14 @@ function processSingleUpdate(Update $update) {
     if (! $message instanceof Message) {
         return;
     }
+    var_dump($message);
     if ($this->isMessageSuitable($message)) {
+        return;
         $this->replyToMessage($message);
     }
 }
 
+private
 function isMessageSuitable(Message $message): bool {
     if($message->has('chat') && $this->isSerhii($message)) {
         foreach($this->triggers->getTriggers() as $trigger) {
