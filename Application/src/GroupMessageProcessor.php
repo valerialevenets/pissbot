@@ -21,7 +21,25 @@ class GroupMessageProcessor
         if ($this->isMessageSuitable($message)) {
             $this->replyToMessage($message);
         }
+        if ($this->isSharii($message)) {
+            $this->telegram->sendVideo(
+                [
+                    'chat_id' => $message->get('chat')['id'],
+                    'reply_to_message_id' => $message->get('message_id'),
+                    'video' => 'BAACAgIAAx0Cek9ncgACEg9m1fc4ezod_wwdSXsEsnSkwPufnAAC21gAAnZosUq95zDukVWloDUE' ,
+                ]
+            );
+        }
     }
+
+    private function isSharii(Message $message): bool
+    {
+        if (!empty($message->forwardFromChat) && $message->forwardFromChat->username == 'ASupersharij') {
+            return true;
+        }
+        return false;
+    }
+
 
     function isMessageSuitable(Message $message): bool {
         if($message->has('chat') && $this->isSerhii($message)) {
