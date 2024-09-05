@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\ValueObject;
-class Responses
+class SerhiiResponses
 {
     public static function getResponses(): array
     {
@@ -12,6 +12,7 @@ class Responses
             'Знову нажерся?',
             'Знову напився?',
             'Знову бухаєш?',
+            'Насцяв тобі на лице'
         ];
     }
 
