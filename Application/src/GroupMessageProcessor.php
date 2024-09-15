@@ -6,6 +6,7 @@ use Application\ValueObject\PublicResponses;
 use Application\ValueObject\SerhiiResponses;
 use Application\ValueObject\Triggers;
 use Telegram\Bot\Api;
+use Telegram\Bot\Objects\File;
 use Telegram\Bot\Objects\Message;
 
 class GroupMessageProcessor
@@ -19,6 +20,15 @@ class GroupMessageProcessor
 
     public function process(Message $message)
     {
+        if(!empty($message->photo)) {
+//            var_dump($message->photo->last()->toArray());
+            /** @var File $file */
+            $file = $this->telegram->getFile($message->photo->last()->toArray());
+
+            var_dump($this->telegram->getFile($message->photo->last()->toArray()));
+        }
+//        var_dump($message);
+        ;
         if ($this->isMessageSuitable($message)) {
             $this->replyToMessage($message, SerhiiResponses::getRandomResponse());
         } elseif ($this->isSharii($message)) {
@@ -29,8 +39,8 @@ class GroupMessageProcessor
                     'video' => 'BAACAgIAAx0Cek9ncgACEg9m1fc4ezod_wwdSXsEsnSkwPufnAAC21gAAnZosUq95zDukVWloDUE' ,
                 ]
             );
-        } elseif (PublicResponses::hasResponse(trim(mb_strtolower($message->text)))) {
-            $this->replyToMessage($message, PublicResponses::getResponse(trim(mb_strtolower($message->text))));
+        } elseif (PublicResponses::hasResponse($this->removeEmoji(trim(mb_strtolower($message->text))))) {
+            $this->replyToMessage($message, PublicResponses::getResponse($this->removeEmoji(trim(mb_strtolower($message->text)))));
         }
     }
 
@@ -70,5 +80,36 @@ class GroupMessageProcessor
 //         return $id == 273718429;
         return $id == 942380502;
     }
+    private function removeEmoji($string): string
+    {
+        // Match Enclosed Alphanumeric Supplement
+        $regex_alphanumeric = '/[\x{1F100}-\x{1F1FF}]/u';
+        $clear_string = preg_replace($regex_alphanumeric, '', $string);
 
+        // Match Miscellaneous Symbols and Pictographs
+        $regex_symbols = '/[\x{1F300}-\x{1F5FF}]/u';
+        $clear_string = preg_replace($regex_symbols, '', $clear_string);
+
+        // Match Emoticons
+        $regex_emoticons = '/[\x{1F600}-\x{1F64F}]/u';
+        $clear_string = preg_replace($regex_emoticons, '', $clear_string);
+
+        // Match Transport And Map Symbols
+        $regex_transport = '/[\x{1F680}-\x{1F6FF}]/u';
+        $clear_string = preg_replace($regex_transport, '', $clear_string);
+
+        // Match Supplemental Symbols and Pictographs
+        $regex_supplemental = '/[\x{1F900}-\x{1F9FF}]/u';
+        $clear_string = preg_replace($regex_supplemental, '', $clear_string);
+
+        // Match Miscellaneous Symbols
+        $regex_misc = '/[\x{2600}-\x{26FF}]/u';
+        $clear_string = preg_replace($regex_misc, '', $clear_string);
+
+        // Match Dingbats
+        $regex_dingbats = '/[\x{2700}-\x{27BF}]/u';
+        $clear_string = preg_replace($regex_dingbats, '', $clear_string);
+
+        return $clear_string;
+    }
 }

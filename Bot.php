@@ -2,11 +2,11 @@
 
 require __DIR__.'/vendor/autoload.php';
 require_once 'Triggers.php';
-require_once 'Responses.php';
-require_once 'TokenProvider.php';
+require_once 'SerhiiResponses.php';
+require_once 'ConfigProvider.php';
 
-use Application\TokenProvider;
-use Application\ValueObject\Responses;
+use Application\ConfigProvider;
+use Application\ValueObject\SerhiiResponses;
 use Application\ValueObject\Triggers;
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Message;
@@ -16,13 +16,13 @@ class Bot {
     private ?Api $telegram = null;
     private int $latestUpdateId = 1;
     private Triggers $triggers;
-    private Responses $responses;
+    private SerhiiResponses $responses;
 
     public function __construct()
     {
-        $this->telegram = new Api(TokenProvider::getToken());
+        $this->telegram = new Api(ConfigProvider::getTelegramToken());
         $this->triggers = new Triggers();
-        $this->responses = new Responses();
+        $this->responses = new SerhiiResponses();
     }
 
     public function getLatestUpdateId(): int
@@ -60,11 +60,11 @@ private
 function isMessageSuitable(Message $message): bool {
     if($message->has('chat') && $this->isSerhii($message)) {
         foreach($this->triggers->getTriggers() as $trigger) {
-            if (str_contains(strtolower($message->get('text')), $trigger)) {
+            if (str_contains(mb_strtolower($message->get('text')), $trigger)) {
                 return true;
             }
         }
-        return str_contains(strtolower($message->get('text')), 'banana');
+        return str_contains(mb_strtolower($message->get('text')), 'banana');
     }
     return false;
 }

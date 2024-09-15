@@ -3,7 +3,6 @@
 require __DIR__.'/vendor/autoload.php';
 
 use Application\MessageProcessor;
-use Application\TokenProvider;
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Message;
 use Telegram\Bot\Objects\Update;
@@ -34,6 +33,7 @@ class NewBot
                 $this->processSingleUpdate($update);
             } catch (\Exception $ex) {
                 //yes, do nothing but log
+                throw $ex;
             }
         }
     }
@@ -48,7 +48,7 @@ class NewBot
     }
 }
 
-$tg = new Api(TokenProvider::getToken());
+$tg = new Api(\Application\ConfigProvider::getTelegramToken());
 $bot = new NewBot(
     $tg,
     1,
